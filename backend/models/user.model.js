@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    fullname: {
+    name: {
         type: String,
         required: true
     },
@@ -10,29 +10,48 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    phoneNumber: {
-        type: Number,
+    password: {
+        type: String,
         required: true
     },
-    password:{
-        type:String,
-        required:true,
+    phone: {
+        type: String,
+        default: ""
     },
+    
     role:{
         type:String,
-        enum:['student','recruiter'],
-        required:true
+        enum:['user','admin'],
+        default: "user"
     },
-    profile:{
-        bio:{type:String},
-        skills:[{type:String}],
-        resume:{type:String}, // URL to resume file
-        resumeOriginalName:{type:String},
-        company:{type:mongoose.Schema.Types.ObjectId, ref:'Company'}, 
-        profilePhoto:{
-            type:String,
-            default:""
-        }
+    resume: {
+        type: String,
+        default: ""
     },
+    resumePublicId: {
+        type: String,
+        default: ""
+    },
+    savedJobs: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Job"
+    },
+    savedInterviewQuestions: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "InterviewQuestion"
+    },
+    savedRoleQuestions: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "RoleQuestion"
+    },
+    isVerified:{
+        type:Boolean,
+        default:false
+    },
+    verificationOTP:String,
+    verificationOTPExpires:Date,
+    resetPasswordOTP:String,
+    resetPasswordOTPExpires:Date,
 },{timestamps:true});
-export const User = mongoose.model('User', userSchema);
+
+export default mongoose.model('User', userSchema);
